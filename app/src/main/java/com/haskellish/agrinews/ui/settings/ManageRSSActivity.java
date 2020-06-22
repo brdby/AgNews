@@ -2,21 +2,15 @@ package com.haskellish.agrinews.ui.settings;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.haskellish.agrinews.NewsApp;
 import com.haskellish.agrinews.R;
 import com.haskellish.agrinews.db.*;

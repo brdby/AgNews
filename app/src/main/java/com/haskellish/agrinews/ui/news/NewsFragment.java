@@ -67,11 +67,11 @@ public class NewsFragment extends ListFragment {
         NewsDB db = NewsApp.getInstance().getDatabase();
         RSSDao rssDao = db.rssDao();
         List<RSS> links = rssDao.getAll();
+        if (!links.isEmpty()) setListShown(false);
         for (RSS rss : links){
             ParsingTask updateTask = new ParsingTask();
             updateTask.execute(rss.url);
         }
-        setListShown(false);
     }
 
     @Override

@@ -14,10 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.haskellish.agrinews.R;
 import com.haskellish.agrinews.ui.MainActivity;
 
-public class SettingsFragment extends Fragment implements View.OnClickListener {
-    final private String[] catNames = new String[] {
-            "Рыжик", "Барсик", "Мурзик", "sample1", "sample2", "sample3"
-    };
+public class SettingsFragment extends Fragment {
 
     Button mngLinks;
 
@@ -31,13 +28,13 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mngLinks = getActivity().findViewById(R.id.mngLinks);
-        mngLinks.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(this.getContext(), ManageRSSActivity.class);
-        startActivity(intent);
+        mngLinks = view.findViewById(R.id.mngLinks);
+        mngLinks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SettingsFragment.this.getActivity(), ManageRSSActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
