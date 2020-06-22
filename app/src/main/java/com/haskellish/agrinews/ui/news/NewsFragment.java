@@ -35,12 +35,14 @@ public class NewsFragment extends ListFragment {
             String url = strings[0];
             RSSParser rssParser = new RSSParser(url);
             List<News> newNews = rssParser.getNews();
-            newsList.addAll(newNews);
-            for (News news : newNews){
-                map = new HashMap<>();
-                map.put("Header", news.getTitle());
-                map.put("Content", news.getDescription());
-                adapterNewsList.add(map);
+            if (newNews != null){
+                newsList.addAll(newNews);
+                for (News news : newNews){
+                    map = new HashMap<>();
+                    map.put("Header", news.getTitle());
+                    map.put("Content", news.getDescription());
+                    adapterNewsList.add(map);
+                }
             }
             return null;
         }
