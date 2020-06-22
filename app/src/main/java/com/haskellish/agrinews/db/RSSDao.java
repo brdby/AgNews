@@ -16,8 +16,8 @@ public interface RSSDao {
     @Query("SELECT * FROM rss")
     List<RSS> getAll();
 
-    @Query("SELECT * FROM rss WHERE id = :id")
-    RSS getById(long id);
+    @Query("DELETE FROM rss WHERE url = :url")
+    void deleteByURL(String url);
 
     @Insert
     void insert(RSS employee);

@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.object;
+package com.haskellish.agrinews.rss;
 
 import java.io.Serializable;
 

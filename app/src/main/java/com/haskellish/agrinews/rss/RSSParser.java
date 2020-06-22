@@ -2,8 +2,6 @@ package com.haskellish.agrinews.rss;
 
 import android.util.Xml;
 
-import com.haskellish.agrinews.object.News;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 

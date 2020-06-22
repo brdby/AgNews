@@ -18,6 +18,7 @@ public class NewsApp extends Application {
         instance = this;
         database = Room.databaseBuilder(this, NewsDB.class, "database")
                 .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
                 .build();
     }
 

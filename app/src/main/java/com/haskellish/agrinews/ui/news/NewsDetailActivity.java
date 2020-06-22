@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.ui;
+package com.haskellish.agrinews.ui.news;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.haskellish.agrinews.R;
-import com.haskellish.agrinews.object.News;
+import com.haskellish.agrinews.rss.News;
 
 public class NewsDetailActivity extends Activity {
 

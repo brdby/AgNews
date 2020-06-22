@@ -16,4 +16,8 @@
     <string name="menu_news">News</string>
     <string name="menu_settings">Settings</string>
     <string name="news_link">News link</string>
+    <string name="settings_rss_url">RSS URL</string>
+    <string name="settings_add">Add</string>
+    <string name="settings_delete">Delete</string>
+    <string name="settings_manage_rss_links">Manage RSS links</string>
 </resources>
