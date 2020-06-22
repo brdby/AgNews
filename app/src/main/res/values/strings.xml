@@ -1,9 +1,19 @@
 <resources>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">AgriNews</string>
+    <string name="nav_header_subtitle">News app</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
     <string name="app_name">AgriNews</string>
     <string name="news_header">News header</string>
     <string name="news_content">News content</string>
     <string name="menu_news">News</string>
     <string name="menu_settings">Settings</string>
-    <string name="open">Open</string>
-    <string name="close">Close</string>
+    <string name="news_link">News link</string>
 </resources>
