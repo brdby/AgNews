@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:key="mngRSS"
+        app:title="@string/settings_manage_rss_links"
+        app:summary="@string/settings_rss_links_summary"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        app:key="mngKeywords"
+        app:title="@string/settings_manage_keywords"
+        app:summary="@string/settings_keywords_summary"
+        app:iconSpaceReserved="false"/>
+
+
+    <SwitchPreferenceCompat
+        app:key="switchNotifications"
+        app:title="@string/settings_notifications_summary"
+        app:iconSpaceReserved="false"/>
+
+    <Preference
+        app:key="mngTime"
+        app:title="@string/settings_change_time"
+        app:summary="@string/settings_time_summary"
+        app:dependency="switchNotifications"
+        app:iconSpaceReserved="false"/>
+
+
+</PreferenceScreen>

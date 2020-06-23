@@ -25,4 +25,9 @@
     <string name="settings_enable_notifications">Enable notifications</string>
     <string name="settings_current_time">Current time</string>
     <string name="settings_change_time">Change time</string>
+    <string name="settings_rss_links_summary">Add and delete RSS links that you want to parse</string>
+    <string name="settings_keywords_summary">News without keywords will not be shown</string>
+    <string name="settings_notifications">notifications</string>
+    <string name="settings_notifications_summary">Enable news notifications</string>
+    <string name="settings_time_summary">Change the time at which notifications will be displayed</string>
 </resources>
