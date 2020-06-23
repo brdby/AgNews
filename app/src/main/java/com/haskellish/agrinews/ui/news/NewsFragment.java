@@ -13,8 +13,10 @@ import androidx.fragment.app.ListFragment;
 
 import com.haskellish.agrinews.NewsApp;
 import com.haskellish.agrinews.R;
+import com.haskellish.agrinews.db.KeywordDao;
 import com.haskellish.agrinews.db.NewsDB;
 import com.haskellish.agrinews.db.RSSDao;
+import com.haskellish.agrinews.db.entity.Keyword;
 import com.haskellish.agrinews.db.entity.RSS;
 import com.haskellish.agrinews.rss.News;
 import com.haskellish.agrinews.rss.RSSParser;
@@ -27,6 +29,7 @@ public class NewsFragment extends ListFragment {
     SimpleAdapter adapter;
     ArrayList<HashMap<String, String>> adapterNewsList = new ArrayList<>();
     List<News> newsList = new ArrayList<>();
+    List<String> keyWordsList = new ArrayList<>();
 
     class ParsingTask extends AsyncTask<String, Void, Void> {
 
@@ -36,12 +39,21 @@ public class NewsFragment extends ListFragment {
             RSSParser rssParser = new RSSParser(url);
             List<News> newNews = rssParser.getNews();
             if (newNews != null){
-                newsList.addAll(newNews);
                 for (News news : newNews){
-                    map = new HashMap<>();
-                    map.put("Header", news.getTitle());
-                    map.put("Content", news.getDescription());
-                    adapterNewsList.add(map);
+                    //check for keywords
+                    boolean matchesKeyword = false;
+                    for (String k : keyWordsList){
+                        if (news.getTitle().toLowerCase().contains(k.toLowerCase()) ||
+                                news.getDescription().toLowerCase().contains(k.toLowerCase()))
+                            matchesKeyword = true;
+                    }
+                    if (matchesKeyword || keyWordsList.isEmpty()){
+                        newsList.add(news);
+                        map = new HashMap<>();
+                        map.put("Header", news.getTitle());
+                        map.put("Content", news.getDescription());
+                        adapterNewsList.add(map);
+                    }
                 }
             }
             return null;
@@ -59,14 +71,21 @@ public class NewsFragment extends ListFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        //initialize adapter
         adapter = new SimpleAdapter(getActivity().getApplicationContext(), adapterNewsList,
                 R.layout.news_item,
                 new String[]{"Header", "Content"},
                 new int[]{R.id.news_header, R.id.news_content});
         setListAdapter(adapter);
 
+        //initialize keywords
         NewsDB db = NewsApp.getInstance().getDatabase();
+        KeywordDao keywordDao = db.keywordDao();
+        for (Keyword k : keywordDao.getAll()){
+            keyWordsList.add(k.word);
+        }
+
+        //initialize news
         RSSDao rssDao = db.rssDao();
         List<RSS> links = rssDao.getAll();
         if (!links.isEmpty()) setListShown(false);

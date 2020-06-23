@@ -13,45 +13,46 @@ import androidx.annotation.Nullable;
 import com.google.android.material.textfield.TextInputEditText;
 import com.haskellish.agrinews.NewsApp;
 import com.haskellish.agrinews.R;
-import com.haskellish.agrinews.db.*;
-import com.haskellish.agrinews.db.entity.RSS;
+import com.haskellish.agrinews.db.KeywordDao;
+import com.haskellish.agrinews.db.NewsDB;
+import com.haskellish.agrinews.db.entity.Keyword;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageRSSActivity extends Activity implements View.OnClickListener {
+public class ManageKeywordsActivity extends Activity implements View.OnClickListener {
 
     NewsDB db;
 
     TextInputEditText textInputEditText;
     Button add, delete;
     ListView listView;
-    ArrayList<String> linksArr = new ArrayList<>();
+    ArrayList<String> keywordsArr = new ArrayList<>();
     ArrayAdapter<String> listAdapter;
-    ArrayList<String> checkedRSS = new ArrayList<>();
+    ArrayList<String> checkedKeywords = new ArrayList<>();
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_rss);
+        setContentView(R.layout.activity_settings_keywords);
 
-        textInputEditText = findViewById(R.id.rssInput);
-        add = findViewById(R.id.rss_add_button);
+        textInputEditText = findViewById(R.id.KeywordsInput);
+        add = findViewById(R.id.keywords_add_button);
         add.setOnClickListener(this);
-        delete = findViewById(R.id.rss_delete_button);
+        delete = findViewById(R.id.keywords_delete_button);
         delete.setOnClickListener(this);
-        listView = findViewById(R.id.RSSRecyclerView);
+        listView = findViewById(R.id.KeywordsRecyclerView);
         db = NewsApp.getInstance().getDatabase();
 
-        RSSDao rssDao = db.rssDao();
-        List<RSS> links = rssDao.getAll();
+        KeywordDao keywordDao = db.keywordDao();
+        List<Keyword> links = keywordDao.getAll();
         for (int i = 0; i < links.size(); i++){
-            linksArr.add(links.get(i).url);
+            keywordsArr.add(links.get(i).word);
         }
 
         listAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_multiple_choice, linksArr);
+                android.R.layout.simple_list_item_multiple_choice, keywordsArr);
         listView.setAdapter(listAdapter);
 
 
@@ -60,8 +61,8 @@ public class ManageRSSActivity extends Activity implements View.OnClickListener 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String selItem = (String) adapterView.getItemAtPosition(i);
-                if (checkedRSS.contains(selItem)) checkedRSS.remove(selItem);
-                else checkedRSS.add(selItem);
+                if (checkedKeywords.contains(selItem)) checkedKeywords.remove(selItem);
+                else checkedKeywords.add(selItem);
             }
         });
     }
@@ -69,24 +70,24 @@ public class ManageRSSActivity extends Activity implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.rss_add_button:
+            case R.id.keywords_add_button:
                 if (textInputEditText.getText() != null
                         && !textInputEditText.getText().toString().equals("")
-                        && !linksArr.contains(textInputEditText.getText().toString())){
-                    RSSDao rssDao = db.rssDao();
-                    RSS rss = new RSS();
-                    rss.url = textInputEditText.getText().toString();
-                    rssDao.insert(rss);
-                    linksArr.add(rss.url);
+                        && !keywordsArr.contains(textInputEditText.getText().toString())){
+                    KeywordDao keywordDao = db.keywordDao();
+                    Keyword keyword = new Keyword();
+                    keyword.word = textInputEditText.getText().toString();
+                    keywordDao.insert(keyword);
+                    keywordsArr.add(keyword.word);
                     listAdapter.notifyDataSetChanged();
                 }
                 break;
 
-            case R.id.rss_delete_button:
-                RSSDao rssDao = db.rssDao();
-                for (String s : checkedRSS) {
-                    rssDao.deleteByURL(s);
-                    linksArr.remove(s);
+            case R.id.keywords_delete_button:
+                KeywordDao keywordDao = db.keywordDao();
+                for (String s : checkedKeywords) {
+                    keywordDao.deleteByWord(s);
+                    keywordsArr.remove(s);
                 }
                 listView.clearChoices();
                 listAdapter.notifyDataSetChanged();

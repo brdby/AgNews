@@ -30,6 +30,9 @@
 
         <activity android:name=".ui.settings.ManageRSSActivity">
         </activity>
+
+        <activity android:name=".ui.settings.ManageKeywordsActivity">
+        </activity>
     </application>
 
 </manifest>

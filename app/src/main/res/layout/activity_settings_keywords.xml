@@ -2,40 +2,39 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="25dp">
 
-
     <ListView
-        android:id="@+id/RSSRecyclerView"
+        android:id="@+id/KeywordsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:choiceMode="multipleChoice"
-        app:layout_constraintBottom_toTopOf="@+id/RSSTextInputLayout"
+        app:layout_constraintBottom_toTopOf="@+id/KeywordsTextInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/RSSTextInputLayout"
+        android:id="@+id/KeywordsTextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/rss_delete_button"
+        app:layout_constraintBottom_toTopOf="@+id/keywords_delete_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/rssInput"
+            android:id="@+id/KeywordsInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/settings_rss_url" />
+            android:hint="@string/settings_keyword" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/rss_add_button"
+        android:id="@+id/keywords_add_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -43,25 +42,24 @@
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/rss_guideline" />
+        app:layout_constraintRight_toLeftOf="@+id/keywords_guideline" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/rss_guideline"
+        android:id="@+id/keywords_guideline"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
     <Button
-        android:id="@+id/rss_delete_button"
+        android:id="@+id/keywords_delete_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/settings_delete"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/rss_guideline"
+        app:layout_constraintLeft_toRightOf="@+id/keywords_guideline"
         app:layout_constraintRight_toRightOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

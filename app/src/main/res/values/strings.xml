@@ -20,4 +20,9 @@
     <string name="settings_add">Add</string>
     <string name="settings_delete">Delete</string>
     <string name="settings_manage_rss_links">Manage RSS links</string>
+    <string name="settings_manage_keywords">Manage keywords</string>
+    <string name="settings_keyword">Keyword</string>
+    <string name="settings_enable_notifications">Enable notifications</string>
+    <string name="settings_current_time">Current time</string>
+    <string name="settings_change_time">Change time</string>
 </resources>
