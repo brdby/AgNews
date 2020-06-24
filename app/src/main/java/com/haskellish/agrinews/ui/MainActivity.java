@@ -48,10 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("1001", "name", importance);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = this.getSystemService(NotificationManager.class);
+            NotificationChannel channel = new NotificationChannel(TimeNotification.CHANNEL_ID,
+                    TimeNotification.CHANNEL_NAME, importance);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }

@@ -1,33 +1,31 @@
 package com.haskellish.agrinews.ui.settings;
 
 import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import androidx.annotation.Nullable;
+import android.widget.TimePicker;
+
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.haskellish.agrinews.R;
 import com.haskellish.agrinews.notifications.TimeNotification;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements
+        SharedPreferences.OnSharedPreferenceChangeListener,
+        TimePickerDialog.OnTimeSetListener {
 
     Calendar dateAndTime = Calendar.getInstance();
-    AlarmManager am;
-    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-    Intent intent;
-    PendingIntent pendingIntent;
+    SharedPreferences sPref;
+
+    public final static String SAVED_TIME = "SAVED_TIME";
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -37,77 +35,96 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        Preference changeTime = findPreference(s);
-        assert changeTime != null;
-        if (changeTime.isEnabled()) startNotify();
-        else stopNotify();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("1001", "name", importance);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+        if (s.equals("switchNotifications")){
+            Preference changeTime = findPreference(s);
+            assert changeTime != null;
+            System.out.println(changeTime.isEnabled());
+            if (changeTime.isEnabled()) startNotify();
+            else stopNotify();
         }
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        sPref = getPreferenceManager().getSharedPreferences();
+        sPref.registerOnSharedPreferenceChangeListener(this);
+
+        dateAndTime.setTimeInMillis(getTime());
 
         Preference mngLinks = findPreference("mngRSS");
+        assert mngLinks != null;
         mngLinks.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(SettingsFragment.this.getActivity(), ManageRSSActivity.class);
+                Intent intent =
+                        new Intent(SettingsFragment.this.getActivity(), ManageRSSActivity.class);
                 startActivity(intent);
                 return true;
             }
         });
 
         Preference mngKeywords = findPreference("mngKeywords");
+        assert mngKeywords != null;
         mngKeywords.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent(SettingsFragment.this.getActivity(), ManageKeywordsActivity.class);
+                Intent intent =
+                        new Intent(SettingsFragment.this.getActivity(), ManageKeywordsActivity.class);
                 startActivity(intent);
                 return true;
             }
         });
 
         Preference mngTime = findPreference("mngTime");
+        assert mngTime != null;
         mngTime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                new TimePickerDialog(SettingsFragment.this.getActivity(), null,
-                        dateAndTime.get(Calendar.HOUR_OF_DAY),
-                        dateAndTime.get(Calendar.MINUTE), true)
-                        .show();
+                TimePickerDialog t =
+                        new TimePickerDialog(SettingsFragment.this.getActivity(),
+                                SettingsFragment.this,
+                                dateAndTime.get(Calendar.HOUR_OF_DAY),
+                                dateAndTime.get(Calendar.MINUTE),
+                                true);
+                t.show();
                 return true;
             }
         });
-
-        am = (AlarmManager) this.getContext().getSystemService(Context.ALARM_SERVICE);
-        intent = new Intent(this.getContext(), TimeNotification.class);
-        pendingIntent = PendingIntent.getBroadcast(this.getContext(), 0,
-                intent, PendingIntent.FLAG_CANCEL_CURRENT );
     }
 
     public void startNotify() {
-        // На случай, если мы ранее запускали активити, а потом поменяли время,
-        // откажемся от уведомления
+        AlarmManager am = (AlarmManager) this.getActivity().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this.getActivity(), TimeNotification.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), 0,
+                intent,0);
         am.cancel(pendingIntent);
-        // Устанавливаем разовое напоминание
-        am.set(AlarmManager.RTC_WAKEUP, timestamp.getTime(), pendingIntent);
+        am.set(AlarmManager.RTC_WAKEUP, dateAndTime.getTimeInMillis(), pendingIntent);
     }
 
     public void stopNotify(){
+        AlarmManager am = (AlarmManager) this.getActivity().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this.getActivity(), TimeNotification.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), 0,
+                intent,0);
         am.cancel(pendingIntent);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+        dateAndTime.set(Calendar.HOUR_OF_DAY, i);
+        dateAndTime.set(Calendar.MINUTE, i1);
+        saveTime(dateAndTime.getTimeInMillis());
+        startNotify();
+    }
+
+    private void saveTime(long value){
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putLong(SAVED_TIME, value);
+        ed.apply();
+    }
+
+    private long getTime(){
+        return sPref.getLong(SAVED_TIME, System.currentTimeMillis());
     }
 }

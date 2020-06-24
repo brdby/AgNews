@@ -17,15 +17,22 @@ import com.haskellish.agrinews.ui.settings.SettingsFragment;
 
 public class TimeNotification extends BroadcastReceiver {
 
-    NotificationManager nm;
+    public static final String CHANNEL_ID = "1001";
+    public static final String CHANNEL_NAME = "News notifications";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1001")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Title")
-                .setContentText("Content")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(context,
+                0, notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_list_24)
+                .setContentTitle(context.getResources().getString(R.string.notification_title))
+                .setContentText(context.getResources().getString(R.string.notification_content))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(contentIntent);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(1, builder.build());
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
