@@ -34,4 +34,7 @@
     <string name="notification_title">News</string>
     <string name="notification_content">New selection of news!</string>
     <string name="empty_news_list">You must add a link to the RSS feed in the settings</string>
+    <string name="settings_category">Category</string>
+    <string name="settings_manage_categories">Manage categories</string>
+    <string name="settings_categories_summary">News only with this categories will be shown</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.haskellish.agrinews.rss;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class News implements Serializable {
 
@@ -9,11 +10,14 @@ public class News implements Serializable {
     private String link;
     private String image_url;
 
-    public News(String title, String description, String link, String image_url) {
+    private ArrayList<String> categories;
+
+    public News(String title, String description, String link, String image_url, ArrayList<String> categories) {
         this.title = title;
         this.description = description;
         this.link = link;
         this.image_url = image_url;
+        this.categories = categories;
     }
 
     public String getTitle() {
@@ -30,5 +34,9 @@ public class News implements Serializable {
 
     public String getImage_url() {
         return image_url;
+    }
+
+    public ArrayList<String> getCategories() {
+        return categories;
     }
 }

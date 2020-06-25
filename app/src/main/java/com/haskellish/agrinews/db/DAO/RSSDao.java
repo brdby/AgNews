@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.db;
+package com.haskellish.agrinews.db.DAO;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

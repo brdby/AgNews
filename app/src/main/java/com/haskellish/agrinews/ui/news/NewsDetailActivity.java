@@ -16,11 +16,13 @@ import com.haskellish.agrinews.R;
 import com.haskellish.agrinews.rss.News;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class NewsDetailActivity extends Activity {
 
     private TextView title;
     private TextView description;
+    private TextView categories;
     private TextView link;
     private ImageView img;
 
@@ -33,6 +35,7 @@ public class NewsDetailActivity extends Activity {
         description = findViewById(R.id.detail_news_content);
         link = findViewById(R.id.detail_news_link);
         img = findViewById(R.id.detail_news_image);
+        categories = findViewById(R.id.detail_news_categories);
 
         Intent i = getIntent();
         News news = (News) i.getSerializableExtra("newsObject");
@@ -41,6 +44,12 @@ public class NewsDetailActivity extends Activity {
             title.setText(Html.fromHtml(news.getTitle()));
             description.setText(Html.fromHtml(news.getDescription()));
             link.setText(news.getLink());
+            ArrayList<String> categoriesList = news.getCategories();
+            if (!categoriesList.isEmpty()){
+                for (String c : categoriesList){
+                    categories.append(c + "; ");
+                }
+            }
             if (!news.getImage_url().equals("")) new DownloadImageTask(img).execute(news.getImage_url());
         }
 

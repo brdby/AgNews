@@ -14,6 +14,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.haskellish.agrinews.NewsApp;
 import com.haskellish.agrinews.R;
 import com.haskellish.agrinews.db.*;
+import com.haskellish.agrinews.db.DAO.RSSDao;
 import com.haskellish.agrinews.db.entity.RSS;
 
 import java.util.ArrayList;

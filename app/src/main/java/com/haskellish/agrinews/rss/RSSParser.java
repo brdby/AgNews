@@ -63,10 +63,14 @@ public class RSSParser {
 
     private News readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, null, "item");
+
+        //required fields
         String title = "";
         String description = "";
         String link = "";
         String image_url = "";
+        ArrayList<String> categories = new ArrayList<>();
+
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -78,6 +82,8 @@ public class RSSParser {
                 description = readContent(parser);
             } else if (name.equals("link")) {
                 link = readContent(parser);
+            } else if (name.equals("category")) {
+                categories.add(readContent(parser));
             } else if (name.equals("enclosure") && parser.getAttributeValue(null, "type").contains("image")) {
                 image_url = parser.getAttributeValue(null, "url");
                 readContent(parser);
@@ -85,7 +91,7 @@ public class RSSParser {
                 skip(parser);
             }
         }
-        return new News(title, description, link, image_url);
+        return new News(title, description, link, image_url, categories);
     }
 
     private String readContent(XmlPullParser parser) throws IOException, XmlPullParserException {

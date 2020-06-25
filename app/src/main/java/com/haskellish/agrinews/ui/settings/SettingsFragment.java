@@ -87,6 +87,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             }
         });
 
+        Preference mngCategories = findPreference("mngCategories");
+        assert mngCategories != null;
+        mngCategories.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent =
+                        new Intent(context, ManageCategoriesActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
         Preference mngTime = findPreference("mngTime");
         assert mngTime != null;
         mngTime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -130,8 +142,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
     private void setTime(Calendar dateAndTime, int minutes, int hours){
         dateAndTime.setTimeInMillis(System.currentTimeMillis());
-        dateAndTime.set(Calendar.HOUR_OF_DAY, minutes);
-        dateAndTime.set(Calendar.MINUTE, hours);
+        dateAndTime.set(Calendar.HOUR_OF_DAY, hours);
+        dateAndTime.set(Calendar.MINUTE, minutes);
         if (dateAndTime.getTimeInMillis() < System.currentTimeMillis()) {
             dateAndTime.setTimeInMillis(dateAndTime.getTimeInMillis() + MILLIS_IN_DAY);
         }

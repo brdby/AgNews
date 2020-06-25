@@ -15,6 +15,11 @@
         app:summary="@string/settings_keywords_summary"
         app:iconSpaceReserved="false"/>
 
+    <Preference
+        app:key="mngCategories"
+        app:title="@string/settings_manage_categories"
+        app:summary="@string/settings_categories_summary"
+        app:iconSpaceReserved="false"/>
 
     <SwitchPreferenceCompat
         app:key="switchNotifications"
@@ -27,6 +32,7 @@
         app:summary="@string/settings_time_summary"
         app:dependency="switchNotifications"
         app:iconSpaceReserved="false"/>
+
 
 
 </PreferenceScreen>

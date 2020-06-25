@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -16,9 +14,11 @@ import androidx.fragment.app.ListFragment;
 
 import com.haskellish.agrinews.NewsApp;
 import com.haskellish.agrinews.R;
-import com.haskellish.agrinews.db.KeywordDao;
+import com.haskellish.agrinews.db.DAO.CategoryDAO;
+import com.haskellish.agrinews.db.DAO.KeywordDao;
 import com.haskellish.agrinews.db.NewsDB;
-import com.haskellish.agrinews.db.RSSDao;
+import com.haskellish.agrinews.db.DAO.RSSDao;
+import com.haskellish.agrinews.db.entity.Category;
 import com.haskellish.agrinews.db.entity.Keyword;
 import com.haskellish.agrinews.db.entity.RSS;
 import com.haskellish.agrinews.rss.News;
@@ -32,7 +32,8 @@ public class NewsFragment extends ListFragment {
     SimpleAdapter adapter;
     ArrayList<HashMap<String, String>> adapterNewsList = new ArrayList<>();
     List<News> newsList = new ArrayList<>();
-    List<String> keyWordsList = new ArrayList<>();
+    List<String> keywordsList = new ArrayList<>();
+    List<String> categoriesList = new ArrayList<>();
 
     Context context;
 
@@ -46,13 +47,23 @@ public class NewsFragment extends ListFragment {
             if (newNews != null){
                 for (News news : newNews){
                     //check for keywords
-                    boolean matchesKeyword = false;
-                    for (String k : keyWordsList){
+                    boolean matchesKeywords = false;
+                    for (String k : keywordsList){
                         if (news.getTitle().toLowerCase().contains(k.toLowerCase()) ||
                                 news.getDescription().toLowerCase().contains(k.toLowerCase()))
-                            matchesKeyword = true;
+                            matchesKeywords = true;
                     }
-                    if (matchesKeyword || keyWordsList.isEmpty()){
+
+                    //check for categories
+                    boolean matchesCategories = false;
+                    for (String cl : categoriesList){
+                        for (String c : news.getCategories()){
+                            if (c.toLowerCase().contains(cl.toLowerCase())) matchesCategories = true;
+                        }
+                    }
+
+                    if ((matchesKeywords || keywordsList.isEmpty())
+                            && (matchesCategories || categoriesList.isEmpty())){
                         newsList.add(news);
                         map = new HashMap<>();
                         map.put("Header", news.getTitle());
@@ -94,7 +105,13 @@ public class NewsFragment extends ListFragment {
         NewsDB db = NewsApp.getInstance().getDatabase();
         KeywordDao keywordDao = db.keywordDao();
         for (Keyword k : keywordDao.getAll()){
-            keyWordsList.add(k.word);
+            keywordsList.add(k.word);
+        }
+
+        //initialize categories
+        CategoryDAO categoryDAO = db.categoryDAO();
+        for (Category c : categoryDAO.getAll()){
+            categoriesList.add(c.word);
         }
 
         //initialize news
