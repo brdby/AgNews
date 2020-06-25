@@ -1,16 +1,12 @@
 <resources>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">AgriNews</string>
+    <string name="nav_header_title">AgNews</string>
     <string name="nav_header_subtitle">News app</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home" translatable="false">Home</string>
-    <string name="menu_gallery" translatable="false">Gallery</string>
-    <string name="menu_slideshow" translatable="false">Slideshow</string>
-
-    <string name="app_name">AgriNews</string>
+    <string name="app_name">AgNews</string>
     <string name="news_header">News header</string>
     <string name="news_content">News content</string>
     <string name="menu_news">News</string>

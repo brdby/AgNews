@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/nav_news"
-        android:name="com.haskellish.agrinews.ui.news.NewsFragment"
+        android:name="com.haskellish.agnews.ui.news.NewsFragment"
         android:label="@string/menu_news" />
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.haskellish.agrinews.ui.settings.SettingsFragment"
+        android:name="com.haskellish.agnews.ui.settings.SettingsFragment"
         android:label="@string/menu_settings" />
 
 

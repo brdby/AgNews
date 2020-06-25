@@ -1,4 +1,4 @@
-package com.haskellish.agrinews;
+package com.haskellish.agnews;
 
 import org.junit.Test;
 

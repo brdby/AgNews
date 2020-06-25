@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.rss;
+package com.haskellish.agnews.rss;
 
 import android.util.Xml;
 

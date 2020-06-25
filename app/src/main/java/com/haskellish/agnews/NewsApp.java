@@ -1,10 +1,10 @@
-package com.haskellish.agrinews;
+package com.haskellish.agnews;
 
 import android.app.Application;
 
 import androidx.room.Room;
 
-import com.haskellish.agrinews.db.NewsDB;
+import com.haskellish.agnews.db.NewsDB;
 
 public class NewsApp extends Application {
 

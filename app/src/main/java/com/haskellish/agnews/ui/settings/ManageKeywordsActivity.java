@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.ui.settings;
+package com.haskellish.agnews.ui.settings;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,16 +11,21 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.haskellish.agrinews.NewsApp;
-import com.haskellish.agrinews.R;
-import com.haskellish.agrinews.db.DAO.KeywordDao;
-import com.haskellish.agrinews.db.NewsDB;
-import com.haskellish.agrinews.db.entity.Keyword;
+import com.haskellish.agnews.NewsApp;
+import com.haskellish.agnews.R;
+import com.haskellish.agnews.db.DAO.KeywordDao;
+import com.haskellish.agnews.db.NewsDB;
+import com.haskellish.agnews.db.entity.Keyword;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ManageKeywordsActivity extends Activity implements View.OnClickListener {
+
+    /**
+     * Activity where user can add delete keywords from database
+     */
+
 
     NewsDB db;
 
@@ -46,8 +51,6 @@ public class ManageKeywordsActivity extends Activity implements View.OnClickList
         delete.setOnClickListener(this);
         listView = findViewById(R.id.KeywordsRecyclerView);
         db = NewsApp.getInstance().getDatabase();
-
-        //initializing listView
         listAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_multiple_choice, keywordsArr);
         listView.setAdapter(listAdapter);
@@ -63,6 +66,9 @@ public class ManageKeywordsActivity extends Activity implements View.OnClickList
         getKeywords();
     }
 
+    /**
+     * Get all keywords from database
+     */
     private void getKeywords() {
         KeywordDao keywordDao = db.keywordDao();
         List<Keyword> links = keywordDao.getAll();
@@ -84,6 +90,9 @@ public class ManageKeywordsActivity extends Activity implements View.OnClickList
         }
     }
 
+    /**
+     * Delete all chosen keywords from database
+     */
     private void deleteKeywords() {
         KeywordDao keywordDao = db.keywordDao();
         for (String s : checkedKeywords) {
@@ -94,6 +103,9 @@ public class ManageKeywordsActivity extends Activity implements View.OnClickList
         listAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Add keyword from input field to database
+     */
     private void addKeyword() {
         if (textInputEditText.getText() != null
                 && !textInputEditText.getText().toString().equals("")

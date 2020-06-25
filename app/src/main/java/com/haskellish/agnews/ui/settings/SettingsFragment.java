@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.ui.settings;
+package com.haskellish.agnews.ui.settings;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -14,15 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.haskellish.agrinews.NewsApp;
-import com.haskellish.agrinews.R;
-import com.haskellish.agrinews.notifications.TimeNotification;
+import com.haskellish.agnews.NewsApp;
+import com.haskellish.agnews.R;
+import com.haskellish.agnews.notifications.TimeNotification;
 
 import java.util.Calendar;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener,
         TimePickerDialog.OnTimeSetListener {
+    /**
+     * Simple settings fragment
+     */
 
     Calendar dateAndTime = Calendar.getInstance();
     SharedPreferences sPref;
@@ -33,6 +36,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
     public final static String SAVED_MINUTES = "SAVED_MINUTES";
     public final static String SAVED_HOUR = "SAVED_HOUR";
 
+    /**
+     * Manually attach context in case when fragment is not attached to an activity
+     * @param context context
+     */
     @Override
     public void onAttach(@NonNull Context context) {
         this.context = context;
@@ -58,11 +65,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //work with preferences
         sPref = getPreferenceManager().getSharedPreferences();
         sPref.registerOnSharedPreferenceChangeListener(this);
-
         getSavedTime(dateAndTime);
 
+        //adding listeners
         Preference mngLinks = findPreference("mngRSS");
         assert mngLinks != null;
         mngLinks.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -116,6 +125,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         });
     }
 
+    /**
+     * Starting notify alarm manager
+     */
     public void startNotify() {
         AlarmManager am = (AlarmManager) NewsApp.getInstance().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TimeNotification.class);
@@ -125,6 +137,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         am.set(AlarmManager.RTC_WAKEUP, dateAndTime.getTimeInMillis(), pendingIntent);
     }
 
+    /**
+     * Stopping notify alarm manager
+     */
     public void stopNotify(){
         AlarmManager am = (AlarmManager) NewsApp.getInstance().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, TimeNotification.class);
@@ -133,22 +148,36 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         am.cancel(pendingIntent);
     }
 
+
     @Override
-    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        setTime(dateAndTime, i, i1);
+    public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
+        setTime(dateAndTime, minutes, hours);
         saveTime(dateAndTime);
         startNotify();
     }
 
+    /**
+     * Set hours and minutes to pointed dateAndTime Calendar object. If the specified time and date
+     * is earlier than the current, dateAndTime will be set to the next day
+     * @param dateAndTime Calendar object which will be se to pointed hours and minutes
+     * @param minutes minutes
+     * @param hours hours
+     */
     private void setTime(Calendar dateAndTime, int minutes, int hours){
         dateAndTime.setTimeInMillis(System.currentTimeMillis());
         dateAndTime.set(Calendar.HOUR_OF_DAY, hours);
         dateAndTime.set(Calendar.MINUTE, minutes);
+
+        //if the specified time and date is earlier than the current
         if (dateAndTime.getTimeInMillis() < System.currentTimeMillis()) {
             dateAndTime.setTimeInMillis(dateAndTime.getTimeInMillis() + MILLIS_IN_DAY);
         }
     }
 
+    /**
+     * Save time to shared preferences
+     * @param dateAndTime time that we want to save (only hour and minutes are used)
+     */
     private void saveTime(Calendar dateAndTime){
         SharedPreferences.Editor ed = sPref.edit();
         ed.putInt(SAVED_MINUTES, dateAndTime.get(Calendar.MINUTE));
@@ -156,6 +185,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         ed.apply();
     }
 
+    /**
+     * load saved time from shared preferences
+     * @param dateAndTime calendar object which will be used to point loaded time
+     */
     private void getSavedTime(Calendar dateAndTime){
         int minutes = sPref.getInt(SAVED_MINUTES, 0);
         int hours = sPref.getInt(SAVED_HOUR, 0);

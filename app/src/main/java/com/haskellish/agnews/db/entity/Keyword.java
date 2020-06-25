@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.db.entity;
+package com.haskellish.agnews.db.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

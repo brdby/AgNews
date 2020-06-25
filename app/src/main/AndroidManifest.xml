@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.haskellish.agrinews">
+    package="com.haskellish.agnews">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -23,14 +23,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.news.NewsDetailActivity">
-        </activity>
+        <activity android:name=".ui.news.NewsDetailActivity"/>
 
-        <activity android:name=".ui.settings.ManageRSSActivity">
-        </activity>
+        <activity android:name=".ui.settings.ManageRSSActivity"/>
 
-        <activity android:name=".ui.settings.ManageKeywordsActivity">
-        </activity>
+        <activity android:name=".ui.settings.ManageKeywordsActivity"/>
 
         <activity android:name=".ui.settings.ManageCategoriesActivity" />
 

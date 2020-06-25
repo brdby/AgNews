@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.db.DAO;
+package com.haskellish.agnews.db.DAO;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.haskellish.agrinews.db.entity.RSS;
+import com.haskellish.agnews.db.entity.RSS;
 
 import java.util.List;
 

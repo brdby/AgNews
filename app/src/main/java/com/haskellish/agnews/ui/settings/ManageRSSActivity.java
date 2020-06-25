@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.ui.settings;
+package com.haskellish.agnews.ui.settings;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,16 +11,20 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.haskellish.agrinews.NewsApp;
-import com.haskellish.agrinews.R;
-import com.haskellish.agrinews.db.*;
-import com.haskellish.agrinews.db.DAO.RSSDao;
-import com.haskellish.agrinews.db.entity.RSS;
+import com.haskellish.agnews.NewsApp;
+import com.haskellish.agnews.R;
+import com.haskellish.agnews.db.*;
+import com.haskellish.agnews.db.DAO.RSSDao;
+import com.haskellish.agnews.db.entity.RSS;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ManageRSSActivity extends Activity implements View.OnClickListener {
+
+    /**
+     * Activity where user can add delete RSS links from database
+     */
 
     NewsDB db;
 
@@ -37,6 +41,7 @@ public class ManageRSSActivity extends Activity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_rss);
 
+        //initializing views
         textInputEditText = findViewById(R.id.rssInput);
         add = findViewById(R.id.rss_add_button);
         add.setOnClickListener(this);
@@ -44,19 +49,9 @@ public class ManageRSSActivity extends Activity implements View.OnClickListener 
         delete.setOnClickListener(this);
         listView = findViewById(R.id.RSSRecyclerView);
         db = NewsApp.getInstance().getDatabase();
-
-        RSSDao rssDao = db.rssDao();
-        List<RSS> links = rssDao.getAll();
-        for (int i = 0; i < links.size(); i++){
-            linksArr.add(links.get(i).url);
-        }
-
         listAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_multiple_choice, linksArr);
         listView.setAdapter(listAdapter);
-
-
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -65,33 +60,60 @@ public class ManageRSSActivity extends Activity implements View.OnClickListener 
                 else checkedRSS.add(selItem);
             }
         });
+
+        getRSS();
+    }
+
+    /**
+     * Get all RSS links from database
+     */
+    private void getRSS() {
+        RSSDao rssDao = db.rssDao();
+        List<RSS> links = rssDao.getAll();
+        for (int i = 0; i < links.size(); i++){
+            linksArr.add(links.get(i).url);
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.rss_add_button:
-                if (textInputEditText.getText() != null
-                        && !textInputEditText.getText().toString().equals("")
-                        && !linksArr.contains(textInputEditText.getText().toString())){
-                    RSSDao rssDao = db.rssDao();
-                    RSS rss = new RSS();
-                    rss.url = textInputEditText.getText().toString();
-                    rssDao.insert(rss);
-                    linksArr.add(rss.url);
-                    listAdapter.notifyDataSetChanged();
-                }
+                addRSS();
                 break;
 
             case R.id.rss_delete_button:
-                RSSDao rssDao = db.rssDao();
-                for (String s : checkedRSS) {
-                    rssDao.deleteByURL(s);
-                    linksArr.remove(s);
-                }
-                listView.clearChoices();
-                listAdapter.notifyDataSetChanged();
+                deleteRSS();
                 break;
+        }
+    }
+
+    /**
+     * Delete all chosen RSS links from database
+     */
+    private void deleteRSS() {
+        RSSDao rssDao = db.rssDao();
+        for (String s : checkedRSS) {
+            rssDao.deleteByURL(s);
+            linksArr.remove(s);
+        }
+        listView.clearChoices();
+        listAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Add RSS link from input field to database
+     */
+    private void addRSS() {
+        if (textInputEditText.getText() != null
+                && !textInputEditText.getText().toString().equals("")
+                && !linksArr.contains(textInputEditText.getText().toString())){
+            RSSDao rssDao = db.rssDao();
+            RSS rss = new RSS();
+            rss.url = textInputEditText.getText().toString();
+            rssDao.insert(rss);
+            linksArr.add(rss.url);
+            listAdapter.notifyDataSetChanged();
         }
     }
 }

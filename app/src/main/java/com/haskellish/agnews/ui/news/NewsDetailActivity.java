@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.ui.news;
+package com.haskellish.agnews.ui.news;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,13 +12,16 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.haskellish.agrinews.R;
-import com.haskellish.agrinews.rss.News;
+import com.haskellish.agnews.R;
+import com.haskellish.agnews.rss.News;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 
 public class NewsDetailActivity extends Activity {
+    /**
+     * Activity with detailed news
+     */
 
     private TextView title;
     private TextView description;
@@ -31,15 +34,25 @@ public class NewsDetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
 
+        //initializing views
         title = findViewById(R.id.detail_news_header);
         description = findViewById(R.id.detail_news_content);
         link = findViewById(R.id.detail_news_link);
         img = findViewById(R.id.detail_news_image);
         categories = findViewById(R.id.detail_news_categories);
 
+        //get serialized news
         Intent i = getIntent();
         News news = (News) i.getSerializableExtra("newsObject");
+        setNewsContent(news);
 
+    }
+
+    /**
+     * Set all content from News object to the views
+     * @param news
+     */
+    private void setNewsContent(News news) {
         if (news != null){
             title.setText(Html.fromHtml(news.getTitle()));
             description.setText(Html.fromHtml(news.getDescription()));
@@ -52,11 +65,16 @@ public class NewsDetailActivity extends Activity {
             }
             if (!news.getImage_url().equals("")) new DownloadImageTask(img).execute(news.getImage_url());
         }
-
     }
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+
         ImageView imageView;
+
+        /**
+         * Download image from the pointed URL and set it to the pointed Bitmap
+         * @param bmImage Bitmap object where downloaded image will be set
+         */
 
         public DownloadImageTask(ImageView bmImage) {
             this.imageView = bmImage;

@@ -1,12 +1,7 @@
-package com.haskellish.agrinews.ui;
+package com.haskellish.agnews.ui;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -17,18 +12,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.preference.PreferenceManager;
 
 import com.google.android.material.navigation.NavigationView;
-import com.haskellish.agrinews.R;
-import com.haskellish.agrinews.notifications.TimeNotification;
-
-import java.sql.Timestamp;
+import com.haskellish.agnews.R;
+import com.haskellish.agnews.notifications.TimeNotification;
 
 public class MainActivity extends AppCompatActivity {
 
-    AlarmManager am;
-    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+    /**
+     * MainActivity contains navigation menu
+     */
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -50,7 +43,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        //build channel for notifications
+
+        createNotificationChannel();
+    }
+
+    /**
+     * Creating notifications channel for news notifications
+     */
+    private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(TimeNotification.CHANNEL_ID,

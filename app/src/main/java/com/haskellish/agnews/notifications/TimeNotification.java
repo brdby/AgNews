@@ -1,4 +1,4 @@
-package com.haskellish.agrinews.notifications;
+package com.haskellish.agnews.notifications;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,8 +9,8 @@ import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.haskellish.agrinews.R;
-import com.haskellish.agrinews.ui.MainActivity;
+import com.haskellish.agnews.R;
+import com.haskellish.agnews.ui.MainActivity;
 
 public class TimeNotification extends BroadcastReceiver {
 
