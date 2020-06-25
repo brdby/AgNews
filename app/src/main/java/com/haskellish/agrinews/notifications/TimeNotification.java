@@ -1,8 +1,6 @@
 package com.haskellish.agrinews.notifications;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +11,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.haskellish.agrinews.R;
 import com.haskellish.agrinews.ui.MainActivity;
-import com.haskellish.agrinews.ui.settings.SettingsFragment;
 
 public class TimeNotification extends BroadcastReceiver {
 

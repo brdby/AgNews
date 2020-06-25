@@ -1,9 +1,12 @@
 package com.haskellish.agrinews.ui.news;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -30,6 +33,8 @@ public class NewsFragment extends ListFragment {
     ArrayList<HashMap<String, String>> adapterNewsList = new ArrayList<>();
     List<News> newsList = new ArrayList<>();
     List<String> keyWordsList = new ArrayList<>();
+
+    Context context;
 
     class ParsingTask extends AsyncTask<String, Void, Void> {
 
@@ -66,16 +71,23 @@ public class NewsFragment extends ListFragment {
         }
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setEmptyText(getResources().getString(R.string.empty_news_list));
+
         //initialize adapter
-        adapter = new SimpleAdapter(getActivity().getApplicationContext(), adapterNewsList,
+        adapter = new SimpleAdapter(getContext(), adapterNewsList,
                 R.layout.news_item,
-                new String[]{"Header", "Content"},
-                new int[]{R.id.news_header, R.id.news_content});
+                new String[]{"Header"},
+                new int[]{R.id.news_header});
         setListAdapter(adapter);
 
         //initialize keywords
@@ -104,7 +116,7 @@ public class NewsFragment extends ListFragment {
         for (News n : newsList){
             if (n.getTitle().equals(title)) news = n;
         }
-        Intent intent = new Intent(this.getContext(), NewsDetailActivity.class);
+        Intent intent = new Intent(context, NewsDetailActivity.class);
         intent.putExtra("newsObject", news);
         startActivity(intent);
     }

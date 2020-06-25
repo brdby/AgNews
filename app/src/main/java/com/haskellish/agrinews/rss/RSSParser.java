@@ -66,6 +66,7 @@ public class RSSParser {
         String title = "";
         String description = "";
         String link = "";
+        String image_url = "";
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -77,11 +78,14 @@ public class RSSParser {
                 description = readContent(parser);
             } else if (name.equals("link")) {
                 link = readContent(parser);
+            } else if (name.equals("enclosure") && parser.getAttributeValue(null, "type").contains("image")) {
+                image_url = parser.getAttributeValue(null, "url");
+                readContent(parser);
             } else {
                 skip(parser);
             }
         }
-        return new News(title, description, link);
+        return new News(title, description, link, image_url);
     }
 
     private String readContent(XmlPullParser parser) throws IOException, XmlPullParserException {

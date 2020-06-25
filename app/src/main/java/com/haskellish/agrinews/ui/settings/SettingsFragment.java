@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.haskellish.agrinews.NewsApp;
 import com.haskellish.agrinews.R;
 import com.haskellish.agrinews.notifications.TimeNotification;
 
@@ -25,7 +27,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
     Calendar dateAndTime = Calendar.getInstance();
     SharedPreferences sPref;
 
-    public final static String SAVED_TIME = "SAVED_TIME";
+    Context context;
+
+    public final static long MILLIS_IN_DAY = 1000*60*60*24;
+    public final static String SAVED_MINUTES = "SAVED_MINUTES";
+    public final static String SAVED_HOUR = "SAVED_HOUR";
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        this.context = context;
+        super.onAttach(context);
+    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -38,9 +50,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         if (s.equals("switchNotifications")){
             Preference changeTime = findPreference(s);
             assert changeTime != null;
-            System.out.println(changeTime.isEnabled());
-            if (changeTime.isEnabled()) startNotify();
-            else stopNotify();
+            boolean isChecked = sharedPreferences.getBoolean("switchNotifications", false);
+            if (isChecked) startNotify(); else stopNotify();
         }
     }
 
@@ -50,7 +61,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         sPref = getPreferenceManager().getSharedPreferences();
         sPref.registerOnSharedPreferenceChangeListener(this);
 
-        dateAndTime.setTimeInMillis(getTime());
+        getSavedTime(dateAndTime);
 
         Preference mngLinks = findPreference("mngRSS");
         assert mngLinks != null;
@@ -58,7 +69,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent =
-                        new Intent(SettingsFragment.this.getActivity(), ManageRSSActivity.class);
+                        new Intent(context, ManageRSSActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -70,7 +81,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent =
-                        new Intent(SettingsFragment.this.getActivity(), ManageKeywordsActivity.class);
+                        new Intent(context, ManageKeywordsActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -82,7 +93,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 TimePickerDialog t =
-                        new TimePickerDialog(SettingsFragment.this.getActivity(),
+                        new TimePickerDialog(context,
                                 SettingsFragment.this,
                                 dateAndTime.get(Calendar.HOUR_OF_DAY),
                                 dateAndTime.get(Calendar.MINUTE),
@@ -94,37 +105,48 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
     }
 
     public void startNotify() {
-        AlarmManager am = (AlarmManager) this.getActivity().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this.getActivity(), TimeNotification.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), 0,
+        AlarmManager am = (AlarmManager) NewsApp.getInstance().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, TimeNotification.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
                 intent,0);
         am.cancel(pendingIntent);
         am.set(AlarmManager.RTC_WAKEUP, dateAndTime.getTimeInMillis(), pendingIntent);
     }
 
     public void stopNotify(){
-        AlarmManager am = (AlarmManager) this.getActivity().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this.getActivity(), TimeNotification.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), 0,
+        AlarmManager am = (AlarmManager) NewsApp.getInstance().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, TimeNotification.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
                 intent,0);
         am.cancel(pendingIntent);
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        dateAndTime.set(Calendar.HOUR_OF_DAY, i);
-        dateAndTime.set(Calendar.MINUTE, i1);
-        saveTime(dateAndTime.getTimeInMillis());
+        setTime(dateAndTime, i, i1);
+        saveTime(dateAndTime);
         startNotify();
     }
 
-    private void saveTime(long value){
+    private void setTime(Calendar dateAndTime, int minutes, int hours){
+        dateAndTime.setTimeInMillis(System.currentTimeMillis());
+        dateAndTime.set(Calendar.HOUR_OF_DAY, minutes);
+        dateAndTime.set(Calendar.MINUTE, hours);
+        if (dateAndTime.getTimeInMillis() < System.currentTimeMillis()) {
+            dateAndTime.setTimeInMillis(dateAndTime.getTimeInMillis() + MILLIS_IN_DAY);
+        }
+    }
+
+    private void saveTime(Calendar dateAndTime){
         SharedPreferences.Editor ed = sPref.edit();
-        ed.putLong(SAVED_TIME, value);
+        ed.putInt(SAVED_MINUTES, dateAndTime.get(Calendar.MINUTE));
+        ed.putInt(SAVED_HOUR, dateAndTime.get(Calendar.HOUR_OF_DAY));
         ed.apply();
     }
 
-    private long getTime(){
-        return sPref.getLong(SAVED_TIME, System.currentTimeMillis());
+    private void getSavedTime(Calendar dateAndTime){
+        int minutes = sPref.getInt(SAVED_MINUTES, 0);
+        int hours = sPref.getInt(SAVED_HOUR, 0);
+        setTime(dateAndTime, minutes, hours);
     }
 }

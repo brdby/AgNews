@@ -32,6 +32,9 @@
         <activity android:name=".ui.settings.ManageKeywordsActivity">
         </activity>
 
+        <activity android:name=".ui.intro.appIntro"
+            android:label="AppIntro" />
+
         <receiver android:name=".notifications.TimeNotification" />
     </application>
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AgriNews</string>
+    <string name="navigation_drawer_open">Открыть меню</string>
+    <string name="navigation_drawer_close">Закрыть меню</string>
+    <string name="nav_header_title" translatable="false">AgriNews</string>
+    <string name="nav_header_subtitle">Новостное приложение</string>
+    <string name="nav_header_desc">Шапка меню</string>
+    <string name="action_settings">Настройки</string>
+    <string name="menu_news">Новости</string>
+    <string name="news_header">Заголовок новости</string>
+    <string name="news_content">Содержание новости</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="news_link">Ссылка на новость</string>
+    <string name="settings_add">Добавить</string>
+    <string name="settings_delete">Удалить</string>
+    <string name="settings_manage_rss_links">RSS ссылки</string>
+    <string name="settings_manage_keywords">Ключевые слова</string>
+    <string name="settings_keyword">Ключевое слово</string>
+    <string name="settings_enable_notifications">Включить уведомления</string>
+    <string name="settings_current_time">Текущее время</string>
+    <string name="settings_change_time">Изменить время</string>
+    <string name="settings_rss_links_summary">Настройка новостных ссылок</string>
+    <string name="settings_keywords_summary">Настройка ключевых слов</string>
+    <string name="settings_notifications">Уведомления</string>
+    <string name="settings_notifications_summary">Включить уведомления о новостях</string>
+    <string name="settings_time_summary">Изменить время, в которое каждый день будут выводиться уведомления</string>
+    <string name="notification_title">Новости</string>
+    <string name="notification_content">Новая подборка новостей!</string>
+    <string name="empty_news_list">Необходимо добавить ссылку на RSS канал в настройках</string>
+</resources>

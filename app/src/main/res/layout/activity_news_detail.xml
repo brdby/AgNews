@@ -1,40 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/detail_news_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/news_header"
             android:textSize="25sp"
-            android:text="@string/news_header" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/detail_news_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_news_header" />
 
         <TextView
             android:id="@+id/detail_news_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/detail_news_header"
-            android:textSize="20sp"
+            android:layout_marginTop="32dp"
             android:autoLink="web"
-            android:text="@string/news_content" />
+            android:text="@string/news_content"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_news_image" />
 
         <TextView
             android:id="@+id/detail_news_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/detail_news_content"
-            android:textSize="15sp"
+            android:layout_marginTop="8dp"
             android:autoLink="web"
-            android:text="@string/news_link" />
-    </RelativeLayout>
+            android:text="@string/news_link"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_news_content" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
